@@ -1,5 +1,3 @@
-script script2
-
 bg defense
 fg defense
 char Phoenix coffee {

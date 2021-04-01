@@ -75,8 +75,10 @@ function advanceHandler(key, location)
         end
 
         gameState = const.DIALOGUE_STATE.TYPE
-        assets.character = {animIndex=0}                        
-        assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. script.character.emotion .. "(talk)")
+        if script.talkAnimate then
+            assets.character = {animIndex=0}         
+            assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. script.character.emotion .. "(talk)")
+        end
     end
 end
 
@@ -96,11 +98,11 @@ function love.draw()
     end
 
     if gameState == const.DIALOGUE_STATE.TYPE or gameState == const.DIALOGUE_STATE.WAIT then
-        if script.character == "" or script.character == nil then
+        if script.character == nil or script.character.nickname == "" then
             love.graphics.draw(assets.ui.textbox, 0, 127)
         else
             love.graphics.draw(assets.ui.textbox_name, 0, 116)
-            love.graphics.printf(script.character.name, assets.font.name, 2, 118, 45, "center")
+            love.graphics.printf(script.character.nickname or "", assets.font.name, 2, 118, 45, "center")
         end
     end
 

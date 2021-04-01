@@ -59,19 +59,23 @@ script.advance = function()
 
                         script.inBlock = true
                         if argsIndex > 2 then
-                            script.character = {name=args[1],emotion="normal"}
+                            script.character = {name=args[1],nickname=args[1],emotion="normal"}
                             assets.character = {animIndex=0}
                             assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/normal(talk)")
+                            script.talkAnimate = true
                         else
-                            script.character = ""
+                            if not script.character then script.character = {} end
+                            script.character.nickname = ""
+                            script.talkAnimate = false
                         end
                         script.advance()
                         return true
                     elseif keyword == "char" and argsIndex == 3 then
                         script.inBlock = true
-                        script.character = {name=args[1],emotion=args[2]}
+                        script.character = {name=args[1],nickname=args[1],emotion=args[2]}
                         assets.character = {animIndex=0}                        
                         assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. args[2] .. "(talk)")
+                        script.talkAnimate = true
                         
                         script.advance()
                         return true
@@ -90,11 +94,11 @@ script.advance = function()
 
         end
     else
-        local tagPattern = "<(.+)%s?(.-)>(.-)</%1>"
+        --local tagPattern = "<(.+)%s?(.-)>(.-)</%1>"
         local currentLine = line:match("^%s*(.+)$"):gsub("\\n","\n")
-        while currentLine:match(tagPattern) do
-            currentLine = currentLine:gsub(tagPattern, "%3")
-        end
+        --while currentLine:match(tagPattern) do
+            --currentLine = currentLine:gsub(tagPattern, "%3")
+        --end
 
         function parseTags(s)
 
@@ -125,14 +129,26 @@ script.advance = function()
 
             if #tagIndices == 0 then return {cleanedText=s, coloredText={{1,1,1}, s}} end
 
+            if #tagIndices/2 == 1 then content = s:sub(1, tagIndices[1]) end
+
             content = content .. s:sub(tagIndices[#tagIndices])
         
             if tags.c then
         
                 local function colorProcessor(colors) 
+                    if colors == "think" or colors == "thinking" or colors == "blue" then
+                        return { 107/255, 198/255, 247/255 }
+                    elseif colors == "emphasis" or colors == "red" then
+                        return { 247/255, 115/255, 57/255 }
+                    elseif colors == "green" then
+                        return { 0, 247/255, 0 }
+                    elseif colors == "white" then
+                        return { 1, 1, 1 }
+                    end
+                    
                     local nums = {}
                     for num in colors:gmatch("%S+") do 
-                        table.insert(nums, tonumber(num)) 
+                        table.insert(nums, tonumber(num)/255) 
                     end
                     return nums 
                 end

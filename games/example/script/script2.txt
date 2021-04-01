@@ -3,3 +3,11 @@ fg defense
 char Phoenix coffee {
     Hey.
 }
+char Phoenix document {
+    Isn't this {c emphasis}interesting?
+}
+
+char {
+    {c thinking}(What the heck is he talking about?!)
+    {c thinking}(Whatever... I'll just buy time until I can leave this coffee dimension.)
+}
