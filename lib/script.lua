@@ -2,9 +2,9 @@ local fs = require "lib/fs"
 
 local script = {}
 
-local keywords = { "bg", "fg", "char" }
+local keywords = { "bg", "fg", "char", "script" }
 
-script.loadScript = function(gameFolder, scriptFile)
+script.loadScript = function(scriptFile)
 
     script.lineIndex = 0
     currentScript = scriptFile
@@ -13,6 +13,7 @@ script.loadScript = function(gameFolder, scriptFile)
 
     script.lines = fs.loadFile("script/" .. scriptFile, ".txt", true)
 
+    return true
 end
 
 script.advance = function()
@@ -80,6 +81,10 @@ script.advance = function()
                         assets[keyword] = fs.loadImage(keyword .. "/" .. arg)
                     end
 
+                    if keyword == "script" then
+                        return script.loadScript(args[1])
+                    end
+
                 end
             end
 
@@ -91,20 +96,80 @@ script.advance = function()
             currentLine = currentLine:gsub(tagPattern, "%3")
         end
 
-        function traverseTags(hierarchy, str)
+        function parseTags(s)
 
-
-            for tag,args,content in str:gmatch(tagPattern) do
-                if not hierarchy[#hierarchy+1] then table.insert(hierarchy, {}) end
-          
-                table.insert(hierarchy[#hierarchy], {tag,args,content})
-          
-                traverseTags(hierarchy[#hierarchy], content)
-                
+            local tagString = "(){([^%s]+)%s?([^}]+)}()"
+        
+            local totalTagLength = 0
+            local tagIndices = {}
+            local tags = {}
+        
+            local tagRegions = {}
+        
+            local content = ""
+        
+            for i,tag,args,j in s:gmatch(tagString) do
+                if not tags[tag] then tags[tag] = {} end
+        
+                table.insert(tagIndices,i)
+                table.insert(tagIndices,j)
+        
+                table.insert(tags[tag], {args=args,indices={i,j}})
+        
+                totalTagLength = totalTagLength + i + j
+        
+                if not (#tagIndices/2 == 1) then
+                    content = content .. s:sub(tagIndices[#tagIndices-2], tagIndices[#tagIndices-1]-1)
+                end
             end
+
+            if #tagIndices == 0 then return {cleanedText=s, coloredText={{1,1,1}, s}} end
+
+            content = content .. s:sub(tagIndices[#tagIndices])
+        
+            if tags.c then
+        
+                local function colorProcessor(colors) 
+                    local nums = {}
+                    for num in colors:gmatch("%S+") do 
+                        table.insert(nums, tonumber(num)) 
+                    end
+                    return nums 
+                end
+        
+                local coloredText = {}
+        
+                for i=1,#tags.c-1 do
+                    local tag = tags.c[i]
+                    local nextTag = tags.c[i+1]
+        
+                    table.insert(
+                        coloredText,
+                        colorProcessor(tag.args)
+                    )
+        
+                    local tosub = s:sub(tag.indices[2], nextTag.indices[1]-1):gsub(tagString, "")
+        
+                    table.insert(
+                        coloredText,
+                        tosub
+                    )
+                end
+        
+                local tosub = s:sub(tags.c[#tags.c].indices[2]):gsub(tagString, "")
+        
+                if tags.c[#tags.c] then
+                    table.insert( coloredText, colorProcessor(tags.c[#tags.c].args))
+                    table.insert( coloredText, tosub )
+                end
+        
+                return {cleanedText=content, coloredText = coloredText}
+            end
+        
+            return {cleanedText=content, coloredText = {{1,1,1}, content}}
         end
 
-        script.currentLine = currentLine
+        script.currentLine = parseTags(currentLine).cleanedText
 
         script.lineProgress = nil
     end

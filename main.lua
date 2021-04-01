@@ -21,7 +21,7 @@ function love.load(arg)
 
     assets = require "lib/load_base_assets"
 
-    script.loadScript(GAME_FOLDER, "main")
+    script.loadScript("main")
 
 
     gameState = const.DIALOGUE_STATE.TYPE
