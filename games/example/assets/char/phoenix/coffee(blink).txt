@@ -1,0 +1,2 @@
+grid 3x3
+length 9

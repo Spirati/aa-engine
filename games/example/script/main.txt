@@ -1,0 +1,32 @@
+bg defense
+fg defense
+char Phoenix coffee {
+    This is an example of the capabilities of the very earliest version of the
+    {c default}(to be renamed) {c emphasis}Visn Ace Attorney engine.
+}
+char Phoenix document {
+    {c thinking}(There's a lot of work to be done -- the code isn't optimized, and it relies on
+    {c thinking}assets from PyWright pretty heavily.)
+    {c default}However -- the {c emphasis}scripting{c default} is primed to be intuitive and capable, and much of
+    the groundwork is in place.
+}
+bg prosecution
+fg prosecution
+char Phoenix coffee {
+    {c default}Full support for {c emphasis}cross-examination, Psyche-Locks, investigation, 
+    and more is intended.
+    Markup for text styling is almost ready, with easy access to shaking the 
+    {c default}screen, {c red}coloring {c green}your {c blue}text, {c default}producing sound effects, and more.
+}
+char Payne sweating {
+    You'll just have to give me time to finish this tag parser... Lua isn't great for
+    working with strings of any kind.
+}
+bg witness
+fg witness
+char Gumshoe pumped {
+    Contributions are welcomed and appreciated! My dream is for the community to get
+    involved in this passion project of mine. I adore the Ace Attorney games so much,
+    and getting to empower the community to be more creative is the most I could 
+    ever hope to do!
+}
