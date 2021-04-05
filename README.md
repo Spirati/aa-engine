@@ -14,8 +14,17 @@ Navigate to the root directory of the repository from a command line and enter `
 - [ ] one-shot animations (very easy implementation)
 - [ ] fading
 ## Gameplay features
+- [ ] Court Record
+    - [ ] Add evidence
+    - [ ] Highlight evidence in dialogue
+    - [ ] Menu screen
 - [ ] Investigation segments
+    - [ ] Examine
+    - [ ] Move
+    - [ ] Talk
+    - [ ] Present
 - [ ] Cross examination
+    - [ ] Psyche-Lock segments
 - [ ] Penalties
 - [ ] Game over
 ## Dialogue/scripting features
@@ -32,10 +41,11 @@ Navigate to the root directory of the repository from a command line and enter `
 - [ ] Inline background, foreground switching
 - [ ] have nametag different from speaking character
 - [ ] separate out speaking and displayed character with less complicated code
+- [ ] Highlight evidence in dialogue
 - [ ] Flags, jumps, named sections
 ## QoL stuff
 - [ ] Stop talking animation when speaking character is thinking
 - [ ] Figure out how in God's name the AA devs spaced out the nametags
     - I seriously don't get how they did this
-    - The `e`s in Edgeworth's name are like 5 pixels wide, on Gumshoe's they're like 4, I can't figure out how they did it
+    - [The `e`s in Phoenix's name are like 3 pixels wide, on Gumshoe's they're like 2](https://i.imgur.com/oFlrmPM.png), I can't figure out how they did it
     - Please DM me on Discord (`@lynne#6968`) or Twitter (`@_lynnux`) or something if you figure it out I'm losing my marbles
