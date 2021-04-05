@@ -68,6 +68,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\code\projects\visn\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\code\projects\visn\lib\x64;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\code\projects\visn\src;$(SourcePath)</SourcePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -97,12 +102,18 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ClCompile>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include=".vscode\visn.code-workspace" />
-    <None Include="assets\sfx\bliphigh.ogg" />
-    <None Include="assets\sfx\bliplow.ogg" />
-    <None Include="games\example\game_conf.lua" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
@@ -131,20 +142,11 @@
     <Image Include="games\example\assets\char\phoenix\document(talk).png" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="assets\ui\wait_arrow.txt" />
-    <Text Include="games\example\assets\char\gumshoe\pumped(blink).txt" />
-    <Text Include="games\example\assets\char\gumshoe\pumped(talk).txt" />
-    <Text Include="games\example\assets\char\payne\confident(blink).txt" />
-    <Text Include="games\example\assets\char\payne\confident(talk).txt" />
-    <Text Include="games\example\assets\char\payne\payne.txt" />
-    <Text Include="games\example\assets\char\payne\sweating(blink).txt" />
-    <Text Include="games\example\assets\char\payne\sweating(talk).txt" />
-    <Text Include="games\example\assets\char\phoenix\coffee(blink).txt" />
-    <Text Include="games\example\assets\char\phoenix\coffee(talk).txt" />
-    <Text Include="games\example\assets\char\phoenix\document(blink).txt" />
-    <Text Include="games\example\assets\char\phoenix\document(talk).txt" />
-    <Text Include="games\example\script\main.txt" />
-    <Text Include="games\example\script\script2.txt" />
+    <ClCompile Include="src\init.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\init.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

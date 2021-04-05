@@ -17,10 +17,6 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="README.md" />
-    <None Include=".vscode\visn.code-workspace" />
-    <None Include="assets\sfx\bliphigh.ogg" />
-    <None Include="assets\sfx\bliplow.ogg" />
-    <None Include="games\example\game_conf.lua" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\blank.png">
@@ -94,19 +90,16 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="assets\ui\wait_arrow.txt" />
-    <Text Include="games\example\assets\char\gumshoe\pumped(blink).txt" />
-    <Text Include="games\example\assets\char\gumshoe\pumped(talk).txt" />
-    <Text Include="games\example\assets\char\payne\confident(blink).txt" />
-    <Text Include="games\example\assets\char\payne\confident(talk).txt" />
-    <Text Include="games\example\assets\char\payne\payne.txt" />
-    <Text Include="games\example\assets\char\payne\sweating(blink).txt" />
-    <Text Include="games\example\assets\char\payne\sweating(talk).txt" />
-    <Text Include="games\example\assets\char\phoenix\coffee(blink).txt" />
-    <Text Include="games\example\assets\char\phoenix\coffee(talk).txt" />
-    <Text Include="games\example\assets\char\phoenix\document(blink).txt" />
-    <Text Include="games\example\assets\char\phoenix\document(talk).txt" />
-    <Text Include="games\example\script\main.txt" />
-    <Text Include="games\example\script\script2.txt" />
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\init.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
