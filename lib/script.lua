@@ -18,6 +18,9 @@ end
 
 script.advance = function()
 
+    
+
+
     if not script.lines then return end
 
     local line = table.remove(script.lines, 1)
@@ -61,7 +64,7 @@ script.advance = function()
                         if argsIndex > 2 then
                             script.character = {name=args[1],nickname=args[1],emotion="normal"}
                             assets.character = {animIndex=0}
-                            assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/normal(talk)")
+                            assets.character.array, assets.character.length, assets.character.loop = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/normal(talk)")
                             script.talkAnimate = true
                         else
                             if not script.character then script.character = {} end
@@ -74,7 +77,7 @@ script.advance = function()
                         script.inBlock = true
                         script.character = {name=args[1],nickname=args[1],emotion=args[2]}
                         assets.character = {animIndex=0}                        
-                        assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. args[2] .. "(talk)")
+                        assets.character.array, assets.character.length, assets.character.loop = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. args[2] .. "(talk)")
                         script.talkAnimate = true
                         
                         script.advance()
@@ -142,7 +145,7 @@ script.advance = function()
                         return { 247/255, 115/255, 57/255 }
                     elseif colors == "green" then
                         return { 0, 247/255, 0 }
-                    elseif colors == "white" then
+                    elseif colors == "white" or colors == "default" then
                         return { 1, 1, 1 }
                     end
                     
@@ -185,9 +188,12 @@ script.advance = function()
             return {cleanedText=content, coloredText = {{1,1,1}, content}}
         end
 
-        script.currentLine = parseTags(currentLine).cleanedText
+        local parsed = parseTags(currentLine)
 
-        script.lineProgress = nil
+        script.currentLine = parsed.cleanedText
+        script.coloredLine = parsed.coloredText
+
+        script.lineProgress = 1
     end
 
     (callback or function() return end)()
@@ -196,13 +202,38 @@ script.advance = function()
 end
 
 script.type = function()
-    if not script.currentLine then return end
 
-    if not script.lineProgress then script.lineProgress = "" end
+    if not script.currentLine then return false end
 
-    script.lineProgress = script.currentLine:sub(1, script.lineProgress:len()-script.currentLine:len())
-    return script.lineProgress:len() == script.currentLine:len()
+    if not script.lineProgress then script.lineProgress = 1 end
 
+    if script.lineProgress < script.currentLine:len() then script.lineProgress = script.lineProgress + 1 end
+
+    return script.lineProgress == script.currentLine:len()
+
+end
+
+script.parseLine = function()
+
+    if script.lineProgress == nil then return {{1,1,1}, ""} end
+
+    local lengthRemaining = script.lineProgress
+    local currentDialogue = {}
+
+    for i=2,#script.coloredLine,2 do
+        table.insert(currentDialogue, script.coloredLine[i-1]) 
+        local currentSegment = script.coloredLine[i]
+
+        if lengthRemaining <= currentSegment:len() then
+            table.insert(currentDialogue, currentSegment:sub(1,lengthRemaining))
+            break
+        else
+            table.insert(currentDialogue, currentSegment)
+            lengthRemaining = lengthRemaining - currentSegment:len()
+        end
+    end
+    
+    return currentDialogue
 end
 
 return script

@@ -13,7 +13,7 @@ end
 
 local const = {}
 
-const.DISPLAY_SCALE = 1
+const.DISPLAY_SCALE = 4
 const.TEXT_RATE = 2
 const.DIALOGUE_STATE = enum {
     "WAIT",

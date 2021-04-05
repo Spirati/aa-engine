@@ -61,7 +61,7 @@ fs.sliceGridImage = function(path, width, height)
         return love.graphics.newArrayImage({love.image.newImageData(SCREEN_WIDTH,SCREEN_HEIGHT)}), 1
     end
 
-    local props = {grid={1,1},length=1}
+    local props = {grid={1,1},length=1,loop=true}
 
     if imageProps then
         local propsData = fs.loadFile(path, ".txt")
@@ -73,6 +73,9 @@ fs.sliceGridImage = function(path, width, height)
             elseif line:match("length") then
                 local length = line:match("(%d+)")
                 props.length = tonumber(length)
+            elseif line:match("loops?") then
+                local loop = line:match("[Tt]rue")
+                if loop then props.loop = true end
             end
         end
     end
@@ -90,7 +93,7 @@ fs.sliceGridImage = function(path, width, height)
         table.insert(slices, slice)
     end
 
-    return love.graphics.newArrayImage(slices), props.length
+    return love.graphics.newArrayImage(slices), props.length, props.loop
 end
 
 fs.loadSFX = function(path)

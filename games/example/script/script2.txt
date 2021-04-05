@@ -4,7 +4,7 @@ char Phoenix coffee {
     Hey.
 }
 char Phoenix document {
-    Isn't this {c emphasis}interesting?
+    {c default}Isn't this {c emphasis}interesting?
 }
 
 char {

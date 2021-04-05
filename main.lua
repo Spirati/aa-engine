@@ -35,7 +35,11 @@ function love.update()
     if not script.inBlock then script.advance() end
 
     if frameCount % 10 == 0 then
-        if assets.character then assets.character.animIndex = (assets.character.animIndex+1)%assets.character.length end
+        if assets.character and assets.character.loop then
+            assets.character.animIndex = (assets.character.animIndex+1)%assets.character.length
+        elseif assets.character and assets.character.animIndex < assets.character.length then
+            assets.character.animIndex = assets.character.animIndex+1
+        end
     end
 
     if frameCount % 3 == 0 then
@@ -47,7 +51,7 @@ function love.update()
             if script.type() then
                 gameState = const.DIALOGUE_STATE.WAIT
                 assets.character = {animIndex=0}                        
-                assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. script.character.emotion .. "(blink)")
+                assets.character.array, assets.character.length, assets.character.loop = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. script.character.emotion .. "(blink)")
             end
         end
 
@@ -77,7 +81,7 @@ function advanceHandler(key, location)
         gameState = const.DIALOGUE_STATE.TYPE
         if script.talkAnimate then
             assets.character = {animIndex=0}         
-            assets.character.array, assets.character.length = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. script.character.emotion .. "(talk)")
+            assets.character.array, assets.character.length, assets.character.loop = fs.sliceGridImage("char/" .. script.character.name:lower() .. "/" .. script.character.emotion .. "(talk)")
         end
     end
 end
@@ -110,8 +114,10 @@ function love.draw()
         love.graphics.drawLayer(assets.ui.wait_arrow.array, assets.ui.wait_arrow.animIndex+1, 256-17, 167)
     end
 
-    love.graphics.printf(script.lineProgress or "", assets.font.text, 8, 127+6, 220)
-    if frameCount % const.TEXT_RATE == 0 and gameState == const.DIALOGUE_STATE.TYPE and not ((script.lineProgress or ""):sub(-1) == " ") then
+    local line = script.parseLine()
+
+    love.graphics.printf(line, assets.font.text, 8, 127+6, 220)
+    if frameCount % const.TEXT_RATE == 0 and gameState == const.DIALOGUE_STATE.TYPE and not (line[#line]:sub(-1) == " ") then
         assets.sfx.blip_high:play()
     end
 

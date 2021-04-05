@@ -2,19 +2,21 @@ bg defense
 fg defense
 char Phoenix coffee {
     This is an example of the capabilities of the very earliest version of the
-    (to be renamed) Visn Ace Attorney engine.
-    There's a lot of work to be done -- the code isn't optimized, and it relies on
-    assets from PyWright pretty heavily. 
-    However -- the scripting is primed to be intuitive and capable, and much of
+    {c default}(to be renamed) {c emphasis}Visn Ace Attorney engine.
+}
+char Phoenix document {
+    {c thinking}(There's a lot of work to be done -- the code isn't optimized, and it relies on
+    {c thinking}assets from PyWright pretty heavily.)
+    {c default}However -- the {c emphasis}scripting{c default} is primed to be intuitive and capable, and much of
     the groundwork is in place.
 }
 bg prosecution
 fg prosecution
-char Payne confident {
-    Full support for cross-examination, Psyche-Locks, investigation, 
+char Phoenix coffee {
+    {c default}Full support for {c emphasis}cross-examination, Psyche-Locks, investigation, 
     and more is intended.
-    XML-like markup for text styling is almost ready, with easy access to shaking the 
-    screen, coloring text, producing sound effects, and more.
+    Markup for text styling is almost ready, with easy access to shaking the 
+    {c default}screen, {c red}coloring {c green}your {c blue}text, {c default}producing sound effects, and more.
 }
 char Payne sweating {
     You'll just have to give me time to finish this tag parser... Lua isn't great for
