@@ -1,6 +1,12 @@
-#include <base.h>
+#include <littlethief/base.h>
+#include <littlethief/except.h>
 #include <iostream>
 #include <vector>
+
+Game game;
+Renderer renderer{};
+AssetFetcher fetcher;
+Script script;
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
@@ -8,5 +14,19 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-	Game game = Game{ argv[1] };
+	fetcher.setDirectories(argv[1]);
+	script.registerFetcher(fetcher);
+
+	renderer.layers.overlay = fetcher.loadImage("bg/witness", renderer);
+
+	bool quit = false;
+
+	while (!quit) {
+		game.ingest(quit);
+
+		renderer.draw();
+	}
+
+	renderer.exit();
+
 }

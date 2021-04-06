@@ -69,9 +69,9 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\code\projects\visn\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\code\projects\visn\lib\x64;$(LibraryPath)</LibraryPath>
-    <SourcePath>D:\code\projects\visn\src;$(SourcePath)</SourcePath>
+    <IncludePath>D:\code\projects\littlethief\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\code\projects\littlethief\lib\x64;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\code\projects\littlethief\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -104,7 +104,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <ClCompile>
@@ -143,13 +143,14 @@
     <Image Include="games\example\assets\char\phoenix\document(talk).png" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\base.cpp" />
+    <ClCompile Include="src\assetfetcher.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\base.h" />
-    <ClInclude Include="include\gameexcept.h" />
+    <ClInclude Include="include\littlethief\base.h" />
+    <ClInclude Include="include\littlethief\except.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

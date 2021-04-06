@@ -1,8 +1,11 @@
-#include <base.h>
+#include <littlethief/base.h>
 
-Game::Game(char* name) : name{ name } {
+void Game::ingest(bool& quit) {
+	quit = false;
+	SDL_Event e;
 
-	fetcher.setDirectories(this);
-	script.registerFetcher(fetcher);
-
+	while (SDL_PollEvent(&e) != 0) {
+		if (e.type == SDL_QUIT)
+			quit = true;
+	}
 }

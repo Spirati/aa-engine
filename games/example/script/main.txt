@@ -2,7 +2,7 @@ bg defense
 fg defense
 char Phoenix coffee {
     This is an example of the capabilities of the very earliest version of the
-    {c default}(to be renamed) {c emphasis}Visn Ace Attorney engine.
+    {c default}(to be renamed) {c emphasis}littlethief Ace Attorney engine.
 }
 char Phoenix document {
     {c thinking}(There's a lot of work to be done -- the code isn't optimized, and it relies on
