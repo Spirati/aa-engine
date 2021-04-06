@@ -1,20 +1,12 @@
-#include <init.h>
-#include <cstdio>
+#include <base.h>
+#include <iostream>
+#include <vector>
 
-Game game{};
-
-int main() {
-	
-	if (!game.init()) {
-		printf("Failed to initialize :(\n");
-	}
-	else {
-		SDL_FillRect(game.gSurface, NULL, SDL_MapRGB(game.gSurface->format, 0xFF, 0x00, 0x00));
-
-		SDL_UpdateWindowSurface(game.gWindow);
-
-		SDL_Delay(2000);
+int main(int argc, char* argv[]) {
+	if (argc != 2) {
+		std::cerr << "No case name provided! Exiting." << std::endl;
+		return 0;
 	}
 
-	game.close();
+	Game game = Game{ argv[1] };
 }
