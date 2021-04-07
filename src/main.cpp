@@ -17,7 +17,8 @@ int main(int argc, char* argv[]) {
 	fetcher.setDirectories(argv[1]);
 	script.registerFetcher(fetcher);
 
-	renderer.layers.overlay = fetcher.loadImage("bg/witness", renderer);
+	renderer.layers.overlay.surface = fetcher.loadImage("bg/witness", renderer);
+	renderer.layers.foreground.surface = fetcher.loadImage("fg/witness", renderer);
 
 	bool quit = false;
 

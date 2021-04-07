@@ -7,12 +7,23 @@
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 192
 
+#define DRAW_LAYER(layer) if (layers.layer.surface != NULL) SDL_BlitSurface(layers.layer.surface, NULL, gWindowSurface, NULL);
+
+#define DRAW_STATIC_LAYER(layer) if (layers.layer.surface != NULL) SDL_BlitSurface(layers.layer.surface, NULL, gWindowSurface, NULL);
+
+struct RendererLayer {
+
+	SDL_Surface* surface{ NULL };
+	int animLength{ 1 };
+	struct Grid { int x{ 1 }, y{ 1 }; } grid;
+};
+
 struct RendererLayers {
-	SDL_Surface* ui;
-	SDL_Surface* overlay;
-	SDL_Surface* foreground;
-	SDL_Surface* character;
-	SDL_Surface* background;
+	RendererLayer ui;
+	RendererLayer overlay;
+	RendererLayer foreground;
+	RendererLayer character;
+	RendererLayer background;
 };
 
 struct Renderer {
@@ -25,18 +36,22 @@ struct Renderer {
 	SDL_Window* gWindow{ NULL };
 	SDL_Surface* gWindowSurface{ NULL };
 
-	RendererLayers layers{ NULL, NULL, NULL, NULL, NULL };
+	RendererLayers layers;
 };
 
 struct Game {
 
-	static enum State {
+	enum class State {
 		Paused,
 		Typing,
 		Waiting,
 		Choosing,
 		Quit
-	} state;
+	};
+
+	State state;
+
+	Game(State state = State::Typing) : state{ state } {}
 
 	void ingest(bool& quit);
 	void update();

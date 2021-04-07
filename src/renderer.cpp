@@ -29,15 +29,18 @@ Renderer::Renderer() {
 void Renderer::draw() {
 	SDL_FillRect(gWindowSurface, NULL, SDL_MapRGB(gWindowSurface->format, 0xFF, 0x00, 0x00));
 
-	if (layers.overlay != NULL)
-		SDL_BlitSurface(layers.overlay, NULL, gWindowSurface, NULL);
+	DRAW_LAYER(ui);
+	DRAW_LAYER(overlay);
+	DRAW_LAYER(foreground);
+	DRAW_LAYER(character);
+	DRAW_LAYER(background);
 
 	SDL_UpdateWindowSurface(gWindow);
 }
 
 void Renderer::exit() {
-	SDL_FreeSurface(layers.overlay);
-	layers.overlay = NULL;
+	SDL_FreeSurface(layers.overlay.surface);
+	layers.overlay.surface = NULL;
 
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
