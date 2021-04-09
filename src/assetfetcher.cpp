@@ -18,11 +18,14 @@ void AssetFetcher::setDirectories(const char* name) {
 
 	defaultDirectory = d;
 	gameDirectory = d / "games" / name;
+
+	if (!filesystem::exists(gameDirectory))
+		throw filesystem::filesystem_error(FILE_NOT_FOUND, gameDirectory, error_code());
 }
 
 filesystem::path AssetFetcher::resolveAssetPath(const char* filename, const char* ext) {
 
-	auto filepath = filesystem::path{ filename }.replace_extension(ext).make_preferred();
+	auto filepath = filesystem::path{ filename }.replace_extension(ext);
 
 	auto gamePath = gameDirectory / "assets" / filepath;
 	auto rootPath = defaultDirectory / "assets" / filepath;
@@ -38,7 +41,7 @@ filesystem::path AssetFetcher::resolveAssetPath(const char* filename, const char
 	}
 }
 filesystem::path AssetFetcher::resolveAssetPath(const char* filename) {
-	auto filepath = filesystem::path{ filename }.make_preferred();
+	auto filepath = filesystem::path{ filename };
 
 	auto gamePath = gameDirectory / "assets" / filepath;
 	auto rootPath = defaultDirectory / "assets" / filepath;
@@ -55,7 +58,7 @@ filesystem::path AssetFetcher::resolveAssetPath(const char* filename) {
 }
 
 filesystem::path AssetFetcher::resolvePath(const char* filename, const char* ext) {
-	auto filepath = filesystem::path{ filename }.replace_extension(ext).make_preferred();
+	auto filepath = filesystem::path{ filename }.replace_extension(ext);
 
 	auto gamePath = gameDirectory / filepath;
 	auto rootPath = defaultDirectory / filepath;
@@ -72,10 +75,10 @@ filesystem::path AssetFetcher::resolvePath(const char* filename, const char* ext
 	}
 }
 filesystem::path AssetFetcher::resolvePath(const char* filename) {
-	const filesystem::path filepath = filesystem::path{ filename }.make_preferred();
+	auto filepath = filesystem::path{ filename };
 
-	auto gamePath = gameDirectory / filepath;
-	auto rootPath = defaultDirectory / filepath;
+	auto gamePath = gameDirectory / filepath.make_preferred();
+	auto rootPath = defaultDirectory / filepath.make_preferred();
 
 	if (filesystem::exists(gamePath)) {
 		return gamePath;
@@ -88,8 +91,7 @@ filesystem::path AssetFetcher::resolvePath(const char* filename) {
 	}
 }
 
-
-ifstream* AssetFetcher::loadFile(const char* filename, const char* ext, const bool asset = true) {
+ifstream AssetFetcher::loadFile(const char* filename, const char* ext, const bool asset = true) {
 	
 	ifstream file;
 	filesystem::path filepath;
@@ -99,7 +101,7 @@ ifstream* AssetFetcher::loadFile(const char* filename, const char* ext, const bo
 			filepath = resolveAssetPath(filename, ext);
 		}
 		catch (filesystem::filesystem_error e) {
-			return nullptr;
+			throw e;
 		}
 	}
 	else {
@@ -107,11 +109,13 @@ ifstream* AssetFetcher::loadFile(const char* filename, const char* ext, const bo
 			filepath = resolvePath(filename, ext);
 		}
 		catch (filesystem::filesystem_error e) {
-			return nullptr;
+			throw e;
 		}
 	}
+	file.open(filepath);
+	return file;
 }
-ifstream* AssetFetcher::loadFile(const char* filename, const bool asset = true) {
+ifstream AssetFetcher::loadFile(const char* filename, const bool asset = true) {
 	ifstream file;
 	filesystem::path filepath;
 
@@ -121,7 +125,7 @@ ifstream* AssetFetcher::loadFile(const char* filename, const bool asset = true) 
 		}
 		catch (filesystem::filesystem_error e) {
 
-			return nullptr;
+			throw e;
 		}
 	}
 	else {
@@ -129,9 +133,11 @@ ifstream* AssetFetcher::loadFile(const char* filename, const bool asset = true) 
 			filepath = resolvePath(filename);
 		}
 		catch (filesystem::filesystem_error e) {
-			return nullptr;
+			throw e;
 		}
 	}
+	file.open(filepath);
+	return file;
 }
 
 SDL_Surface* AssetFetcher::loadImage(const char* path, Renderer& renderer) {

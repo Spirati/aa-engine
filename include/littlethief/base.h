@@ -66,8 +66,9 @@ public:
 
 	void setDirectories(const char* name);
 
-	std::ifstream* loadFile(const char* filename, const char* ext, const bool asset);
-	std::ifstream* loadFile(const char* filename, const bool asset);
+	std::ifstream loadFile(std::filesystem::path path, const bool asset);
+	std::ifstream loadFile(const char* filename, const char* ext, const bool asset);
+	std::ifstream loadFile(const char* filename, const bool asset);
 
 	SDL_Surface* loadImage(const char* path, Renderer& renderer);
 
@@ -87,18 +88,19 @@ class Script {
 
 public:
 
-	void registerFetcher(AssetFetcher& fetcher) {
-		fetcher = fetcher;
+	void registerFetcher(AssetFetcher& fp) {
+		fetcher = &fp;
 	}
 
-	//void loadScript(char* scriptName);
+	void loadScript(const char* scriptName);
 
-	void step();
+	Game::State step();
 
-	static void processTags(char* line);
+	static void processTags(const char* line);
 
 private:
 	std::ifstream currentScript;
+	std::string currentLine;
 	AssetFetcher* fetcher;
 };
 

@@ -13,7 +13,7 @@ Renderer::Renderer() {
 	}
 		
 
-	gWindow = SDL_CreateWindow("Little Thief Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	gWindow = SDL_CreateWindow("Little Thief Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_HIDDEN);
 	if (gWindow == NULL) {
 		const char* e{ SDL_GetError() };
 
@@ -39,6 +39,7 @@ void Renderer::draw() {
 }
 
 void Renderer::exit() {
+
 	SDL_FreeSurface(layers.overlay.surface);
 	layers.overlay.surface = NULL;
 
