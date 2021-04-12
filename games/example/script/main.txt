@@ -1,2 +1,0 @@
-bg witness
-fg witness

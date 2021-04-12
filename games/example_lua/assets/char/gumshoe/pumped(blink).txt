@@ -1,2 +1,0 @@
-grid 2x4
-length 8

@@ -44,26 +44,29 @@ int main(int argc, char* argv[]) {
 	SDL_ShowWindow(renderer.gWindow);
 
 	bool quit = false;
+	Game::State state{ game.state };
+	RendererLayers newLayers;
 
 	while (!quit) {
 		game.ingest(quit);
 
 		try {
-			script.step();
+			StepResult step{ script.step() };
+
+			state = std::get<Game::State>(step);
+			newLayers = std::get<RendererLayers>(step);
 		}
 		catch (std::runtime_error e) {
 			if (!strncmp(e.what(), "Couldn't load script file", 26)) {
 				std::cout << e.what() << std::endl;
-				return 1;
-			}
-			else if (!strncmp(e.what(), "Reached end of script with no successor", 40)) {
-				return 0;
-			}
-			else {
+				break;
+			} else {
 				std::cout << "An unhandled exception occurred! We're not sure what happened." << std::endl;
-				return 1;
+				break;
 			}
 		}
+
+		if (state == Game::State::Quit) break;
 
 		renderer.draw();
 	}

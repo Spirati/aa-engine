@@ -24,6 +24,7 @@ struct RendererLayers {
 	RendererLayer foreground;
 	RendererLayer character;
 	RendererLayer background;
+	bool anySet{ false };
 };
 
 struct Renderer {
@@ -46,7 +47,8 @@ struct Game {
 		Typing,
 		Waiting,
 		Choosing,
-		Quit
+		Quit,
+		Pass
 	};
 
 	State state;
@@ -84,6 +86,8 @@ private:
 };
 
 
+typedef std::tuple<Game::State, RendererLayers> StepResult;
+
 class Script {
 
 public:
@@ -94,14 +98,28 @@ public:
 
 	void loadScript(const char* scriptName);
 
-	Game::State step();
+	StepResult step();
 
 	static void processTags(const char* line);
 
 private:
+
+	enum class Command {
+		SetForeground,
+		SetBackground,
+		SetCharacter,
+		SetNickname,
+		SetSpeaker,
+		SetMusic,
+		NoCommand
+	};
+
+	bool dialogueBlock{ false };
 	std::ifstream currentScript;
 	std::string currentLine;
 	AssetFetcher* fetcher;
+
+	Command commStrToCommand(std::string commstr);
 };
 
 

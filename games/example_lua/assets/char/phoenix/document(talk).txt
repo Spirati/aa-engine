@@ -1,2 +1,0 @@
-grid 4x6
-length 22

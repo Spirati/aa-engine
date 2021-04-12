@@ -1,3 +1,0 @@
-grid 4x6
-length 21
-loops 1
