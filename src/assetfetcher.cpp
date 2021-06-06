@@ -23,10 +23,7 @@ void AssetFetcher::setDirectories(const char* name) {
 		throw filesystem::filesystem_error(FILE_NOT_FOUND, gameDirectory, error_code());
 }
 
-filesystem::path AssetFetcher::resolveAssetPath(const char* filename, const char* ext) {
-
-	auto filepath = filesystem::path{ filename }.replace_extension(ext);
-
+filesystem::path AssetFetcher::resolveAssetPath(filesystem::path filepath) {
 	auto gamePath = gameDirectory / "assets" / filepath;
 	auto rootPath = defaultDirectory / "assets" / filepath;
 
@@ -40,21 +37,25 @@ filesystem::path AssetFetcher::resolveAssetPath(const char* filename, const char
 		throw filesystem::filesystem_error(FILE_NOT_FOUND, "assets" / filepath, error_code());
 	}
 }
+
+filesystem::path AssetFetcher::resolveAssetPath(const char* filename, const char* ext) {
+
+	auto filepath = filesystem::path{ filename }.replace_extension(ext);
+
+	return resolveAssetPath(filepath);
+}
 filesystem::path AssetFetcher::resolveAssetPath(const char* filename) {
 	auto filepath = filesystem::path{ filename };
 
-	auto gamePath = gameDirectory / "assets" / filepath;
-	auto rootPath = defaultDirectory / "assets" / filepath;
+	return resolveAssetPath(filepath);
+}
 
-	if (filesystem::exists(gamePath)) {
-		return gamePath;
-	}
-	else if (filesystem::exists(rootPath)) {
-		return rootPath;
-	}
-	else {
-		throw filesystem::filesystem_error(FILE_NOT_FOUND, "assets" / filepath, error_code());
-	}
+filesystem::path AssetFetcher::resolveAssetPath(const char* filename, const char* folder, const char* ext) {
+	auto filepath_a = filesystem::path{ folder };
+	auto filepath_b = filesystem::path{ filename }.replace_extension(ext);
+	auto filepath = filepath_a / filepath_b;
+
+	return resolveAssetPath(filepath);
 }
 
 filesystem::path AssetFetcher::resolvePath(const char* filename, const char* ext) {
@@ -140,9 +141,9 @@ ifstream AssetFetcher::loadFile(const char* filename, const bool asset = true) {
 	return file;
 }
 
-SDL_Surface* AssetFetcher::loadImage(const char* path, Renderer& renderer) {
+SDL_Surface* AssetFetcher::loadImage(const char* path, const char* folder) {
 
-	std::string filepath = resolveAssetPath(path, "png").generic_string();
+	std::string filepath = resolveAssetPath(path, folder, "png").generic_string();
 
 	const char* fpstr = filepath.c_str();
 
@@ -152,7 +153,7 @@ SDL_Surface* AssetFetcher::loadImage(const char* path, Renderer& renderer) {
 	if (loaded == NULL)
 		throw SDLResourceFailure(SDL_GetError());
 
-	optimized = SDL_ConvertSurface(loaded, renderer.gWindowSurface->format, 0);
+	optimized = SDL_ConvertSurface(loaded, ref_renderer.gWindowSurface->format, 0);
 
 	SDL_FreeSurface(loaded);
 

@@ -1,6 +1,7 @@
 #include <littlethief/base.h>
 #include <regex>
 #include <iostream>
+#include <sstream>
 
 void Script::loadScript(const char* scriptName) {
 	
@@ -44,9 +45,18 @@ StepResult Script::step() {
 
 		switch (command) {
 		case Command::SetBackground:
-			break;
-		case Command::SetForeground:
-			break;
+		case Command::SetForeground: {
+			std::string img = argv.at(0);
+			RendererLayers layers = RendererLayers();
+			RendererLayer newLayer = RendererLayer();
+			newLayer.surface = fetcher->loadImage(img.c_str(), command == Command::SetBackground ? "bg" : "fg");
+			if (command == Command::SetBackground)
+				layers.background = newLayer;
+			else
+				layers.foreground = newLayer;
+			layers.anySet = true;
+			return StepResult{ Game::State::Pass, layers };
+		}
 		case Command::SetCharacter:
 			break;
 		case Command::SetNickname:
@@ -61,7 +71,7 @@ StepResult Script::step() {
 		throw std::runtime_error("Couldn't load script file");
 	}
 	else {
-		return StepResult{ Game::State::Quit, RendererLayers{} };
+		return StepResult{ Game::State::Quit, RendererLayers() };
 	}
 }
 

@@ -16,9 +16,6 @@ int main(int argc, char* argv[]) {
 		std::cout << "Enter the case name (inside games) to be loaded: ";
 		std::cin.getline(casename, 255);
 		std::cout << std::endl;
-	} else if (argc != 2) {
-		std::cerr << "No case name provided! Exiting." << std::endl;
-		return 1;
 	} else {
 		strcpy(casename, argv[1]);
 	}
@@ -55,6 +52,8 @@ int main(int argc, char* argv[]) {
 
 			state = std::get<Game::State>(step);
 			newLayers = std::get<RendererLayers>(step);
+			if (newLayers.anySet)
+				renderer.updateLayers(newLayers);
 		}
 		catch (std::runtime_error e) {
 			if (!strncmp(e.what(), "Couldn't load script file", 26)) {
@@ -70,6 +69,8 @@ int main(int argc, char* argv[]) {
 
 		renderer.draw();
 	}
+
+	while (true) {};
 
 	renderer.exit();
 

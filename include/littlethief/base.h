@@ -12,7 +12,6 @@
 #define DRAW_STATIC_LAYER(layer) if (layers.layer.surface != NULL) SDL_BlitSurface(layers.layer.surface, NULL, gWindowSurface, NULL);
 
 struct RendererLayer {
-
 	SDL_Surface* surface{ NULL };
 	int animLength{ 1 };
 	struct Grid { int x{ 1 }, y{ 1 }; } grid;
@@ -38,6 +37,7 @@ struct Renderer {
 	SDL_Surface* gWindowSurface{ NULL };
 
 	RendererLayers layers;
+	void updateLayers(RendererLayers& newLayers);
 };
 
 struct Game {
@@ -67,22 +67,27 @@ public:
 	AssetFetcher();
 
 	void setDirectories(const char* name);
+	void setRenderer(Renderer& renderer) { ref_renderer = renderer; }
 
 	std::ifstream loadFile(std::filesystem::path path, const bool asset);
 	std::ifstream loadFile(const char* filename, const char* ext, const bool asset);
 	std::ifstream loadFile(const char* filename, const bool asset);
 
-	SDL_Surface* loadImage(const char* path, Renderer& renderer);
+	SDL_Surface* loadImage(const char* path, const char* folder);
 
 
 private:
 	std::filesystem::path gameDirectory;
 	std::filesystem::path defaultDirectory;
+	std::filesystem::path resolveAssetPath(std::filesystem::path filepath);
 	std::filesystem::path resolveAssetPath(const char* filename, const char* ext);
+	std::filesystem::path resolveAssetPath(const char* filename, const char* folder, const char* ext);
 	std::filesystem::path resolveAssetPath(const char* filename);
 
 	std::filesystem::path resolvePath(const char* filename, const char* ext);
 	std::filesystem::path resolvePath(const char* filename);
+
+	Renderer ref_renderer;
 };
 
 

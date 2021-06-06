@@ -24,18 +24,31 @@ Renderer::Renderer() {
 
 	gWindowSurface = SDL_GetWindowSurface(gWindow);
 
+	layers = RendererLayers();
+
 }
 
 void Renderer::draw() {
 	SDL_FillRect(gWindowSurface, NULL, SDL_MapRGB(gWindowSurface->format, 0xFF, 0x00, 0x00));
 
-	DRAW_LAYER(ui);
-	DRAW_LAYER(overlay);
-	DRAW_LAYER(foreground);
-	DRAW_LAYER(character);
+	//RendererLayers newLayer = RendererLayers();
+	//std::cout << static_cast<void*>(newLayer.ui.surface) << ", " << NULL << std::endl;
+
 	DRAW_LAYER(background);
+	DRAW_LAYER(character);
+	DRAW_LAYER(foreground);
+	DRAW_LAYER(overlay);
+	DRAW_LAYER(ui);
 
 	SDL_UpdateWindowSurface(gWindow);
+}
+
+void Renderer::updateLayers(RendererLayers& newLayers) {
+	layers.ui = newLayers.ui.surface == NULL ? layers.ui : newLayers.ui;
+	layers.overlay = newLayers.overlay.surface == NULL ? layers.overlay : newLayers.overlay;
+	layers.foreground = newLayers.foreground.surface == NULL ? layers.foreground : newLayers.foreground;
+	layers.character = newLayers.character.surface == NULL ? layers.character : newLayers.character;
+	layers.background = newLayers.background.surface == NULL ? layers.background : newLayers.background;
 }
 
 void Renderer::exit() {
